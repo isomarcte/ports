@@ -1,0 +1,74 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           github 1.0
+
+github.setup        yarkpkg yarn 0.16.1 v
+
+categories          devel
+platforms           darwin
+license             BSD
+maintainers         gmail.com:isomacrte
+
+supported_archs     noarch
+
+description         yarn package manager for JavaScript.
+long_description    Yarn is a package manager for your code. \
+                    It allows you to use and share code with other developers from around the world. \
+                    Yarn does this quickly, securely, and reliably so you don’t ever have to worry. \
+                    Yarn allows you to use other developers’ solutions to different problems, making it easier for you to develop your software. \
+                    If you have problems, you can report issues or contribute back, and when the problem is fixed, you can use Yarn to keep it all up to date. \
+                    Code is shared through something called a package (sometimes referred to as a module). \
+                    A package contains all the code being shared as well as a package.json file which describes the package.
+
+homepage            https://yarnpkg.com/
+
+github.tarball_from releases
+
+checksums           rmd160 2b95565aafe826fb99795162c62e9a88b7cc2b51 \
+                    sha256 73be27c34ef1dd4217fec23cdfb6b800cd995e9079d4c4764724ef98e98fec07
+
+distname            ${name}-${git.branch}
+
+worksrcdir          "dist"
+
+use_configure       no
+
+depends_lib         path:bin/node:nodejs7
+
+build {}
+
+# Since this is all just JavaScript code, there is nothing to _build_. We just copy the files into the correct locations.
+destroot {
+    xinstall -d -m 755 ${destroot}${prefix}/lib/node_modules/
+    file copy ${worksrcpath} ${destroot}${prefix}/lib/node_modules/
+    file rename ${destroot}${prefix}/lib/node_modules/${worksrcdir} ${destroot}${prefix}/lib/node_modules/${name}
+    ln -s ../lib/node_modules/${name}/bin/${name}.js ${destroot}${prefix}/bin/${name}
+}
+
+# Borrowed a bit of the well written opening from the macports npm packages.
+notes "
+It is not recommended to install packages globally. But if you do so\
+please be aware that they won't get cleaned up when you deactivate\
+or uninstall ${name}. Globally installed packages will leave a\
+symboolic link in ${prefix}/bin with the package resources installed\
+in \$HOME/.yarn-config/global by default. You can remove all globally\
+installed packages by first running the following command (assuming\
+you have xargs installed),
+
+$ ls -1 \$HOME/.yarn-config/global/node_modules/ | xargs sudo yarn global remove
+
+You should also check your \$HOME folder for leftover .yarn* files.
+
+This is only required if you have installed packages globally. If you did not\
+install anything globally then you can uninstall normally.
+
+Note, while this package doesn't conflict with NPM, if you have both NPM and\
+Yarn installed and you use both to install packages globally you may end up\
+with strange errors. If you do choose to install packages globally you should\
+probably only use one of these tools to do so.
+"
+
+livecheck.type      regex
+livecheck.regex     \\s*\"tag_name\":\\s*\"${github.tag_prefix}(\[^\"\]+).*
+livecheck.url       https://api.github.com/repos/yarnpkg/yarn/releases/latest
