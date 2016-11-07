@@ -67,4 +67,11 @@ Note, while this package doesn't conflict with NPM, if you have both NPM and\
 Yarn installed and you use both to install packages globally you may end up\
 with strange errors. If you do choose to install packages globally you should\
 probably only use one of these tools to do so.
+
+Rather than installing packages globally, you can set the environment variable\
+PREFIX and then yarn will install into that location instead, i.e.
+
+mkdir -p $HOME/.yarnGlobal/bin # Or wherever you want
+export PREFIX=$HOME/.yarnGlobal/bin
+export PATH=$PREFIX:$PATH
 "
