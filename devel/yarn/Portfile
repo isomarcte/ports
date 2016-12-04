@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           github 1.0
 
-github.setup        yarnpkg yarn 0.17.10 v
+github.setup        yarnpkg yarn 0.18.0 v
 
 categories          devel
 platforms           darwin
@@ -25,8 +25,8 @@ homepage            https://yarnpkg.com/
 
 github.tarball_from releases
 
-checksums           rmd160 7a8e8ccfd547dd91c8167a8d70c26a49995430b0 \
-                    Sha256 592140a9d387a892935ca49ee93a8207b95073e2b732693987420dd1a7606672
+checksums           rmd160 26ecfb7134e6a400fdceff7c97f535466c934dce \
+                    Sha256 8fb1843d2a1283972ff5fead9d6c9f9002de793ecec6dfec7abec908403ecd19
 
 distname            ${name}-${git.branch}
 
